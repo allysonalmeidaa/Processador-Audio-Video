@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Conversão de Áudio/Vídeo | Processador{% endblock %}
+{% block content %}
+<div class="central-box">
+    <h2>Conversão de Áudio/Vídeo</h2>
+    <form method="POST" enctype="multipart/form-data" class="form-box">
+        <div class="linha-form">
+            <label for="file">Escolher arquivo de vídeo ou áudio:</label>
+            <input type="file" id="file" name="file">
+        </div>
+        <div class="linha-form">
+            <label for="youtube_link">Ou cole o link do YouTube:</label>
+            <input type="text" id="youtube_link" name="youtube_link" placeholder="https://youtube.com/..." size="36">
+        </div>
+        <div class="linha-form">
+            <label for="perfil">Perfil de Conversão:</label>
+            <select id="perfil" name="perfil">
+                {% for key, perfil in perfis.items() %}
+                    <option value="{{ key }}">{{ perfil.label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn-acao">Converter</button>
+    </form>
+
+    {% if error %}
+        <div class="erro">{{ error }}</div>
+    {% endif %}
+
+    {% if resultado_conversao or (from_youtube and video_original) %}
+    <div class="downloads-box">
+        {% if resultado_conversao %}
+        <a href="{{ url_for('baixar_conversao', filename=resultado_conversao) }}" class="download-link">Baixar Arquivo Convertido</a>
+        {% endif %}
+        {% if from_youtube and video_original %}
+        <a href="{{ url_for('baixar_conversao', filename=video_original) }}" class="download-link">Baixar Vídeo Original</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
